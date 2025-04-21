@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.eCommerce.Views.CheckoutView"
+             Title="CheckoutView">
+             
+    <Grid>
+        
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="10*"/>
+                <RowDefinition />
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Text="Receipt" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+            <ListView Grid.Row="1"
+                ItemsSource="{Binding ShoppingCart}"
+             >
+
+             <ListView.ItemTemplate>
+                 <DataTemplate>
+                     <ViewCell>
+                         <Grid>
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition/>
+                                 <ColumnDefinition Width="5*" />
+                                 <ColumnDefinition/>
+                                 <ColumnDefinition/>
+                                 <ColumnDefinition/>
+                                 <ColumnDefinition/>
+                                 
+                             </Grid.ColumnDefinitions>
+                             <Label Grid.Column="0" Text="{Binding Id}"/>
+                             <Label Grid.Column="1" Text="{Binding Product.Name}"/>
+                             <Label Grid.Column="2" Text="Quantity:"/>
+                             <Label Grid.Column="3" Text="{Binding Quantity}"/>
+                             <Label Grid.Column="4" Text="Price: $"/>
+                             <Label Grid.Column="5" Text="{Binding Product.Price}"/>
+
+                         </Grid>
+                     </ViewCell>
+                 </DataTemplate>   
+            
+            </ListView.ItemTemplate>
+           </ListView> 
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Total:" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="{Binding Subtotal}" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Percentage Tax:" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="{Binding tax}" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Grand Total:" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="{Binding total}" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Grid>
+
+            <Label Grid.Row="5" Text="Thank you for shopping with us!" FontSize="Medium" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Button Grid.Row="6" Text="Back to Shop" Clicked="BackToShopClicked"/>
+
+    </Grid>
+</ContentPage>
