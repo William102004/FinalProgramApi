@@ -1,6 +1,15 @@
-using System.Text.RegularExpressions;
+using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
-
+using Library.eCommerce.Utilities;
+using Newtonsoft.Json;
+using FinalProgramAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using Library.eCommerce.Util;
 namespace Library.eCommerce.Services
 {
     public class ShoppingCartService
@@ -54,31 +63,45 @@ namespace Library.eCommerce.Services
         }
         private static ShoppingCartService? instance;
         private ShoppingCartService() { 
-            items = new List<Item>();
+            var CartPayload = new WebRequestHandler().Get("/ShoppingCart").Result;
+            items = JsonConvert.DeserializeObject<List<Item>>(CartPayload) ?? new List<Item>();
+
+           // items = new List<Item>();
+        }
+
+        public async Task<IEnumerable<Item?>> Search(string? query)
+        {
+            if (query == null)
+            {
+                return new List<Item>();
+            }
+            var response = await new WebRequestHandler().Post("/ShoppingCart/Search", new QueryRequest { Query = query});
+            items = JsonConvert.DeserializeObject<List<Item?>>(response) ?? new List<Item?>();
+            return items;
         }
 
         public Item? AddOrUpdate(Item item)
         {
+            var response = new WebRequestHandler().Post("/ShoppingCart", item).Result;
+            var newItem = JsonConvert.DeserializeObject<Item>(response);
             var existingInvItem = _prodSvc.GetById(item.Id);
             if(existingInvItem == null || existingInvItem.Quantity == 0) {
                 return null;
             }
 
-            if (existingInvItem != null)
-            {
-                existingInvItem.Quantity --;
-            }
+           
 
-            var existingItem = CartItems.FirstOrDefault(i => i.Id == item.Id);
+            var existingItem = CartItems.FirstOrDefault(i => i.Product.Name == item.Product.Name);
             if(existingItem == null)
             {
                 //add
-                var newItem = new Item(item);
-                newItem.Quantity = 1;
-                CartItems.Add(newItem);
+                var newCartitem = new Item(newItem);
+                newCartitem.Quantity = 1;
+                existingInvItem.Quantity--;
+                CartItems.Add(newCartitem);
             } else
             {
-                //update
+                existingInvItem.Quantity--;
                 existingItem.Quantity++;
             }
 
@@ -92,8 +115,8 @@ namespace Library.eCommerce.Services
             {
                 return null;
             }
-
-            var itemToReturn = CartItems.FirstOrDefault(c => c.Id == item.Id);
+            var result = new WebRequestHandler().Delete($"/ShoppingCart/{item.Id}").Result;
+            var itemToReturn = CartItems.FirstOrDefault(c => c.Product.Name == item.Product.Name);
             if (itemToReturn != null)
             {
                 itemToReturn.Quantity--;
@@ -108,12 +131,14 @@ namespace Library.eCommerce.Services
             }
 
 
-            return itemToReturn;
+            return JsonConvert.DeserializeObject<Item>(result);
         }
 
         public void ClearCart()
         {
             items.Clear();
+            var result = new WebRequestHandler().Delete("/ShoppingCart").Result;
+            var cart = JsonConvert.DeserializeObject<List<Item>>(result);
         }   
 
 

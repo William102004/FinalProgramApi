@@ -45,7 +45,9 @@ namespace Maui.eCommerce.ViewModels
         {
             get
             {
-                var filteredList = _svc.Products.Where(p => p?.Product?.Name?.ToLower().Contains(Query?.ToLower() ?? string.Empty) ?? false);
+                var filteredList = _svc.Products
+                .Where(p => p?.Product?.Name?.ToLower()
+                .Contains(Query?.ToLower() ?? string.Empty) ?? false);
                 return new ObservableCollection<Item?>(filteredList);
             }
         }

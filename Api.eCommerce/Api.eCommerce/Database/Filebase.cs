@@ -31,8 +31,8 @@ namespace Api.eCommerce.Database
 
         private Filebase()
         {
-            _root = @"C:\\temp";
-            _productRoot = $"{_root}\\Products";
+            _root = "/tmp";
+            _productRoot = $"{_root}/Products";
         }
 
         public int LastKey

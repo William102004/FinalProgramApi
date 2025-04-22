@@ -13,6 +13,8 @@ namespace Api.eCommerce.Database
             new Item{ Product = new ProductDTO{Id = 3, Name ="Product 3 WEB"}, Id=3 , Quantity = 3 }
         };
 
+        public static List<Item?> shoppingCart = new List<Item?>{};
+
         public static int LastKey_Item
         {
             get
@@ -25,6 +27,19 @@ namespace Api.eCommerce.Database
                 return inventory.Select(p => p?.Id ?? 0).Max();
             }
         }
+
+        public static int LastKey_Cart
+        {
+            get
+            {
+                if (!shoppingCart.Any())
+                {
+                    return 0;
+                }
+
+                return shoppingCart.Select(p => p?.Id ?? 0).Max();
+            }
+        }
         public static List<Item?> Inventory
         {
             get
@@ -33,9 +48,23 @@ namespace Api.eCommerce.Database
             }
         }
 
-        public static IEnumerable<Item> Search(string? query)
+        public static List<Item?> ShoppingCart
         {
-            return Inventory.Where(p => p?.Product?.Name?.ToLower()
+            get
+            {
+                return shoppingCart;
+            }
+        }
+
+        public static IEnumerable<Item?> Search(string? query)
+        {
+           return Inventory.Where(p => p?.Product?.Name?.ToLower()
+                     .Contains(query?.ToLower() ?? string.Empty) ?? false);
+        }
+        
+        public static IEnumerable<Item> SearchCart(string? query)
+        {
+            return ShoppingCart.Where(p => p?.Product?.Name?.ToLower()
                  .Contains(query?.ToLower() ?? string.Empty) ?? false);
         }
     }

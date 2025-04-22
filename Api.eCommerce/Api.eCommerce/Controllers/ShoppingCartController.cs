@@ -1,56 +1,58 @@
 using Api.eCommerce.EC;
-using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using FinalProgramAPI.Models;
-using System.Security.Cryptography.Xml;
 using Library.eCommerce.Util;
 
 namespace Api.eCommerce.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
-    public class InventoryController : ControllerBase
+    [ApiController]
+    public class ShoppingCartController : ControllerBase
     {
+        private readonly ILogger<ShoppingCartController> _logger;
 
-        private readonly ILogger<InventoryController> _logger;
-
-        public InventoryController(ILogger<InventoryController> logger)
+        public ShoppingCartController(ILogger<ShoppingCartController> logger)
         {
             _logger = logger;
         }
-
+        
         [HttpGet]
+
         public IEnumerable<Item?> Get()
         {
-           return new InventoryEC().Get();
+            return new ShoppingCartEC().Get();
         }
 
         [HttpGet("{id}")]
+
         public Item? GetById(int id)
         {
-            return new InventoryEC().Get()
+            return new ShoppingCartEC().Get()
                 .FirstOrDefault(i => i?.Id == id);
         }
 
         [HttpDelete("{id}")]
+
         public Item? Delete(int id)
         {
-            return new InventoryEC().Delete(id);
+            return new ShoppingCartEC().Delete(id);
         }
 
         [HttpPost]
+
         public Item? AddOrUpdate([FromBody]Item item)
         {
-
-            var newItem = new InventoryEC().AddOrUpdate(item);
+            var newItem = new ShoppingCartEC().AddOrUpdate(item);
             return item;
         }
 
         [HttpPost("Search")]
+
         public IEnumerable<Item> Search([FromBody]QueryRequest query)
         {
-            return new InventoryEC().Get(query.Query);
+            return new ShoppingCartEC().Get(query.Query);
         }
+
     }
 }
