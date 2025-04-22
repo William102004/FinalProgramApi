@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Library.eCommerce.Util;
 
 namespace Library.eCommerce.Services
 {
@@ -48,6 +49,17 @@ namespace Library.eCommerce.Services
         }
 
         public List<Item?> Products { get; private set; }
+
+        public async Task<IEnumerable<Item?>> Search(string? query)
+        {
+            if (query == null)
+            {
+                return new List<Item>();
+            }
+            var response = await new WebRequestHandler().Post("/Inventory/Search", new QueryRequest { Query = query});
+            Products = JsonConvert.DeserializeObject<List<Item?>>(response) ?? new List<Item?>();
+            return Products;
+        }
 
         public Item AddOrUpdate(Item item)
         {

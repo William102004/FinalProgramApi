@@ -35,6 +35,12 @@ namespace Maui.eCommerce.ViewModels
             NotifyPropertyChanged(nameof(Products));
         }
 
+        public async Task<bool> Search()
+        {
+            await _svc.Search(Query);
+            NotifyPropertyChanged(nameof(Products));
+            return true;
+        }
         public ObservableCollection<Item?> Products
         {
             get
@@ -50,10 +56,13 @@ namespace Maui.eCommerce.ViewModels
             NotifyPropertyChanged("Products");
             return item;
         }
-        public void ClearSearchQuery()
+        public async Task<bool> ClearSearchQuery()
         {
                 Query = string.Empty;
                 NotifyPropertyChanged(nameof(Query));
+                await _svc.Search(Query);
+                NotifyPropertyChanged(nameof(Products));
+                return true;
         }
 
     }
