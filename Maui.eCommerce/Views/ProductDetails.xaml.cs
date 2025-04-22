@@ -1,6 +1,6 @@
 using Library.eCommerce.Services;
 using Maui.eCommerce.ViewModels;
-using FinalProgramApi.Models;
+using FinalProgramAPI.Models;
 
 namespace Maui.eCommerce.Views;
 

@@ -1,7 +1,7 @@
 using Library.eCommerce.Services;
 using Maui.eCommerce.ViewModels;
 
-namespace Maui.ecommerce.Views;
+namespace Maui.eCommerce.Views;
 
 public partial class CheckoutView : ContentPage
 {

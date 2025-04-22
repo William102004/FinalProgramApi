@@ -1,11 +1,11 @@
-using Library.eCommerce.DTO;
+ using Library.eCommerce.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinalProgramApi.Models
+namespace FinalProgramAPI.Models
 {
     public class Product
     {

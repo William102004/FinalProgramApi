@@ -1,6 +1,6 @@
 using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
-using FinalProgramApi.Models;
+using FinalProgramAPI.Models;
 
 namespace Api.eCommerce.Database
 {

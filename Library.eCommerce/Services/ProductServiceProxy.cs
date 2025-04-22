@@ -2,7 +2,7 @@ using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
 using Library.eCommerce.Utilities;
 using Newtonsoft.Json;
-using FinalProgramApi.Models;
+using FinalProgramAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

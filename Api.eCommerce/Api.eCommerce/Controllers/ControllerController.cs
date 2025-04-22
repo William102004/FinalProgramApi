@@ -2,7 +2,7 @@ using Api.eCommerce.EC;
 using Library.eCommerce.DTO;
 using Library.eCommerce.Models;
 using Microsoft.AspNetCore.Mvc;
-using FinalProgramApi.Models;
+using FinalProgramAPI.Models;
 using System.Security.Cryptography.Xml;
 
 namespace Api.eCommerce.Controllers
