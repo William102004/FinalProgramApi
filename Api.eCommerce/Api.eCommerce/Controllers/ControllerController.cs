@@ -45,5 +45,11 @@ namespace Api.eCommerce.Controllers
             var newItem = new InventoryEC().AddOrUpdate(item);
             return item;
         }
+
+        [HttpPost("Search")]
+        public IEnumerable<Item> Search([FromBody]QueryRequest query)
+        {
+            return new InventoryEC().Get(query.Query);
+        }
     }
 }
