@@ -70,4 +70,13 @@ public class ShoppingCartEC
         return existingInvItem;
         
     }
+
+    public void CheckOut()
+    {
+        var ItemstoCheckOut = FakeDatabase.ShoppingCart.ToList();
+        foreach (var item in ItemstoCheckOut)
+        {
+            FakeDatabase.ShoppingCart.Remove(item);
+        }
+    }
 }

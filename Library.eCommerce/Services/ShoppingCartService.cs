@@ -137,8 +137,11 @@ namespace Library.eCommerce.Services
         public void ClearCart()
         {
             items.Clear();
-            var result = new WebRequestHandler().Delete("/ShoppingCart").Result;
+            new WebRequestHandler().Delete("/ShoppingCart/Checkout").Wait();
+            var result = new WebRequestHandler().Get("/ShoppingCart").Result;
             var cart = JsonConvert.DeserializeObject<List<Item>>(result);
+            new WebRequestHandler().Post("/ShoppingCart", cart);
+            
         }   
 
 

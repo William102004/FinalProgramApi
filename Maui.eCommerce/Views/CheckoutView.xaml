@@ -37,12 +37,12 @@
                                  <ColumnDefinition/>
                                  
                              </Grid.ColumnDefinitions>
-                             <Label Grid.Column="0" Text="{Binding Id}"/>
-                             <Label Grid.Column="1" Text="{Binding Product.Name}"/>
+                             <Label Grid.Column="0" Text="{Binding Model.Id}"/>
+                             <Label Grid.Column="1" Text="{Binding Model.Product.Name}"/>
                              <Label Grid.Column="2" Text="Quantity:"/>
-                             <Label Grid.Column="3" Text="{Binding Quantity}"/>
+                             <Label Grid.Column="3" Text="{Binding Model.Quantity}"/>
                              <Label Grid.Column="4" Text="Price: $"/>
-                             <Label Grid.Column="5" Text="{Binding Product.Price}"/>
+                             <Label Grid.Column="5" Text="{Binding Model.Product.Price}"/>
 
                          </Grid>
                      </ViewCell>

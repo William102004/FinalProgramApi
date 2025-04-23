@@ -54,5 +54,13 @@ namespace Api.eCommerce.Controllers
             return new ShoppingCartEC().Get(query.Query);
         }
 
+        [HttpDelete("Checkout")]
+
+        public void CheckOut()
+        {
+            new ShoppingCartEC().CheckOut();
+        }
+
+
     }
 }
