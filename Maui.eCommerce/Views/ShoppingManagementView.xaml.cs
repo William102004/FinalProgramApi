@@ -39,4 +39,14 @@ public partial class ShoppingManagementView : ContentPage
         base.OnAppearing();
         (BindingContext as ShoppingManagementViewModel)?.RefreshUX();
     }
+
+    private void SearchClicked(object sender, EventArgs e)
+    {
+        (BindingContext as ShoppingManagementViewModel)?.Search();
+    }
+
+    private void ClearClicked(object sender, EventArgs e)
+    {  
+        (BindingContext as ShoppingManagementViewModel)?.ClearSearchQuery();
+    }
 }

@@ -13,7 +13,7 @@ public class ShoppingCartEC
 
     public List<Item?> Get()
     {
-        return FakeDatabase.ShoppingCart;
+        return Filebase.Current.ShoppingCart;
     }
    
     public IEnumerable<Item> Get(string? query)
@@ -48,27 +48,28 @@ public class ShoppingCartEC
 
     public Item? AddOrUpdate(Item item)
     {
-        var existingInvItem = FakeDatabase.Inventory.FirstOrDefault(i => i?.Id == item.Id);
+        var existingInvItem = Filebase.Current.Inventory.FirstOrDefault(i => i?.Id == item.Id);
         if(existingInvItem == null || existingInvItem.Quantity == 0) {
                 return null;
         }
 
        
-        existingInvItem.Quantity --;
-        var existingCartItem = FakeDatabase.ShoppingCart.FirstOrDefault(i => i?.Product.Name == item.Product.Name);
-        if(existingCartItem == null)
-        {
-            item.Id = FakeDatabase.LastKey_Cart + 1;
-            item.Product.Id = item.Id;
-            item.Quantity = 1;
-            FakeDatabase.ShoppingCart.Add(item);
-        }
-        else
-        {
-            existingCartItem.Quantity++;
-        }
-        return existingInvItem;
-        
+        //existingInvItem.Quantity --;
+        var existingCartItem = Filebase.Current.ShoppingCart.FirstOrDefault(i => i?.Product.Name == item.Product.Name);
+        //if(existingCartItem == null)
+        //{
+          //  item.Id = FakeDatabase.LastKey_Cart + 1;
+           // item.Product.Id = item.Id;
+          //  item.Quantity = 1;
+           // FakeDatabase.ShoppingCart.Add(item);
+       // }
+       // else
+        //{
+          //  existingCartItem.Quantity++;
+       // }
+        //return existingInvItem;
+
+        return Filebase.Current.ShoppingCartAddOrUpdate(item,existingCartItem,existingInvItem);
     }
 
     public void CheckOut()

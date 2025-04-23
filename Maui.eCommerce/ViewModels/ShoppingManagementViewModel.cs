@@ -19,6 +19,9 @@ namespace Maui.eCommerce.ViewModels
        public ItemViewModel? SelectedItem { get; set; }
        public ItemViewModel? SelectedCartItem { get; set; }
 
+       public string? Query { get; set; }
+
+
         public ObservableCollection<ItemViewModel?> Inventory
         {
             get
@@ -120,6 +123,22 @@ namespace Maui.eCommerce.ViewModels
             {
                 return ShoppingCartService.Current.Totalprice;;
             }
+        }
+
+         public async Task<bool> Search()
+        {
+            await _cartSvc.Search(Query);
+            NotifyPropertyChanged(nameof(ShoppingCart));
+            return true;
+        }
+
+        public async Task<bool> ClearSearchQuery()
+        {
+                Query = string.Empty;
+                NotifyPropertyChanged(nameof(Query));
+                await _cartSvc.Search(Query);
+                NotifyPropertyChanged(nameof(ShoppingCart));
+                return true;
         }
 
         
