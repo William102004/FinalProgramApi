@@ -33,9 +33,9 @@ namespace Api.eCommerce.Database
 
         private Filebase()
         {
-             _root = @"/Users/williamalmaguer/downloads";
+             _root = @"/Users/williamalmaguer/Downloads";
             _productRoot = $"{_root}/Products";
-            _shoppingCartRoot = $"{_root}/ShoppingCart"; 
+            _shoppingCartRoot = $"{_root}/Cart"; 
         }
 
         public int LastKey
@@ -68,9 +68,7 @@ namespace Api.eCommerce.Database
             if(item.Id <= 0)
             {
                 item.Id = LastKey + 1;
-                item.Product.Id = item.Id;
             }
-
             //go to the right place
             string path = $"{_productRoot}/{item.Id}.json";
             
@@ -113,15 +111,22 @@ namespace Api.eCommerce.Database
 
         public bool Delete(Item item)
         {
-            string path = $"{_productRoot}/{item.Id}.json";
-            if(File.Exists(path))
+           
+           string path = $"{_productRoot}/{item.Id}.json";
+           if(File.Exists(path))
             {
                 File.Delete(path);
             }
-            File.Delete($"{_shoppingCartRoot}/{item.Id}.json");
+            File.Delete($"{_productRoot}/{item.Id}.json");
             //TODO: refer to AddOrUpdate for an idea of how you can implement this.
             
             return true;
+        }
+
+        public IEnumerable<Item?> Search(string? query)
+        {
+            return Inventory.Where(p => p?.Product?.Name?.ToLower()
+                      .Contains(query?.ToLower() ?? string.Empty) ?? false);
         }
 
 
@@ -155,8 +160,8 @@ namespace Api.eCommerce.Database
             
             if(cartItem == null)
             {
+                
                 item.Id = LastKey_Cart + 1;
-                item.Product.Id = item.Id;
                 item.Quantity = 1;
                 resultItem = item;
             }
@@ -164,8 +169,9 @@ namespace Api.eCommerce.Database
             {
                 cartItem.Quantity++;
                 resultItem = cartItem;
-               
             } 
+            resultItem.Product.Id = item.Id;
+            //resultItem.Product.Id = resultItem.Id;
 
             string path = $"{_shoppingCartRoot}/{resultItem.Id}.json";
             //go to the right place
@@ -183,22 +189,67 @@ namespace Api.eCommerce.Database
             return resultItem;
         }
 
+
         public bool ShoppingCartDelete(Item item)
         {
-            string path = $"{_productRoot}/{item.Id}.json";
-            if(File.Exists(path))
+            var existingInvItem = Filebase.Current.Inventory.FirstOrDefault(i => i?.Product.Name == item.Product.Name);
+            if(existingInvItem != null)
             {
-                File.Delete(path);
+                existingInvItem.Quantity++;
+                existingInvItem.Id = Filebase.Current.Inventory.FirstOrDefault(i => i?.Product.Name == item.Product.Name).Id;
+                Filebase.Current.AddOrUpdate(existingInvItem);
             }
-            File.Delete($"{_shoppingCartRoot}/{item.Id}.json");
-            //TODO: refer to AddOrUpdate for an idea of how you can implement this.
+            else
+            {
+                Item? Item1 = item;
+                Item1.Quantity = 1;
+                Filebase.Current.AddOrUpdate(Item1);
+            }
+            var existingCartItem = Filebase.Current.ShoppingCart.FirstOrDefault(i => i?.Product.Name == item.Product.Name);
+            if(existingCartItem == null)
+            {
+                return false;
+            }
+            string path = $"{_shoppingCartRoot}/{existingCartItem.Id}.json";
+            if(existingCartItem?.Quantity > 1)
+            {
+                existingCartItem.Quantity--;
+                File.WriteAllText(path, JsonConvert.SerializeObject(existingCartItem));
+            }
+            else
+            {
+                if(File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
             
             return true;
         }
 
-        
+            
+        public void CheckOut()
+        {
+            var ItemstoCheckOut = ShoppingCart.ToList();
+         
+            foreach(var item in ItemstoCheckOut)
+            {
+                var path = $"{_shoppingCartRoot}/{ItemstoCheckOut.FirstOrDefault()?.Id}.json";
+                if (File.Exists(path))
+                {
+                     File.Delete(path);
+                } 
+                File.Delete($"{_shoppingCartRoot}/{item?.Id}.json");
+                   
+            }
+            
+        }
+
+        public IEnumerable<Item?> SearchCart(string? query)
+        {
+            return ShoppingCart.Where(p => p?.Product?.Name?.ToLower()
+                      .Contains(query?.ToLower() ?? string.Empty) ?? false);
+        }
+
     }
-
-
-   
 }

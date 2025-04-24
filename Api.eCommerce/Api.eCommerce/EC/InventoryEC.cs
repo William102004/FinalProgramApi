@@ -17,7 +17,7 @@ namespace Api.eCommerce.EC
 
         public IEnumerable<Item> Get(string? query)
         {
-            return FakeDatabase.Search(query) ?? new List<Item>();
+            return Filebase.Current.Search(query).Take(100) ?? new List<Item>();
         }
 
         public Item? Delete(int id)
@@ -26,7 +26,7 @@ namespace Api.eCommerce.EC
             //var itemToDelete = FakeDatabase.Inventory.FirstOrDefault(i => i?.Id == id);
             if (itemToDelete != null)
             {
-                Filebase.Current.Delete(itemToDelete);
+                  Filebase.Current.Delete(itemToDelete);
                // FakeDatabase.Inventory.Remove(itemToDelete);
             }
 

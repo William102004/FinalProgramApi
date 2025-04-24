@@ -18,29 +18,30 @@ public class ShoppingCartEC
    
     public IEnumerable<Item> Get(string? query)
     {
-        return FakeDatabase.SearchCart(query).Take(100) ?? new List<Item>();
+        return Filebase.Current.SearchCart(query).Take(100) ?? new List<Item>();
     }
 
     public Item? Delete(int id)
     {
-        var itemToReturn = FakeDatabase.ShoppingCart.FirstOrDefault(i => i?.Id == id);
+        var itemToReturn = Filebase.Current.ShoppingCart.FirstOrDefault(i => i?.Id == id);
         if (itemToReturn == null)
         {
             return null;
         }
         if (itemToReturn != null)
         {
-            var existingInvItem = FakeDatabase.Inventory.FirstOrDefault(i => i?.Product.Name == itemToReturn.Product.Name);
-            FakeDatabase.ShoppingCart.Remove(itemToReturn);
-           if(existingInvItem != null)
-           {
-                existingInvItem.Quantity++;
-           }
-           else
-           {
-                FakeDatabase.Inventory.Add(itemToReturn);
-           }
-           
+            var existingInvItem = Filebase.Current.Inventory.FirstOrDefault(i => i?.Product.Name == itemToReturn.Product.Name);
+            //FakeDatabase.ShoppingCart.Remove(itemToReturn);
+           //if(existingInvItem != null)
+           //{
+           //    existingInvItem.Quantity++;
+          //}
+           //else
+           //{
+           //     FakeDatabase.Inventory.Add(itemToReturn);
+          // }
+         // Filebase.Current.ShoppingCartDelete(itemToReturn,existingInvItem);
+            Filebase.Current.ShoppingCartDelete(itemToReturn);
         }
 
         return itemToReturn;
@@ -71,13 +72,14 @@ public class ShoppingCartEC
 
         return Filebase.Current.ShoppingCartAddOrUpdate(item,existingCartItem,existingInvItem);
     }
-
     public void CheckOut()
     {
-        var ItemstoCheckOut = FakeDatabase.ShoppingCart.ToList();
-        foreach (var item in ItemstoCheckOut)
-        {
-            FakeDatabase.ShoppingCart.Remove(item);
-        }
+        //var ItemstoCheckOut = FakeDatabase.ShoppingCart.ToList();
+        //foreach (var item in ItemstoCheckOut)
+        //{
+          //  FakeDatabase.ShoppingCart.Remove(item);
+        //}
+       Filebase.Current.CheckOut();
     }
+
 }

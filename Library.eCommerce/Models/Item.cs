@@ -26,7 +26,7 @@ namespace Library.eCommerce.Models
         public string Display { 
             get
             {
-                return $"{Product?.Display ?? string.Empty}, Price: ${Product?.Price} ,{Quantity} in stock";
+                return $"{Product?.Display ?? string.Empty}, Price: ${Product?.Price} ,{Quantity} in Cart";
             }
         }
 
